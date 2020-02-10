@@ -4,7 +4,9 @@ using RapidCMS.Core.Abstractions.Data;
 
 namespace RapidCMS.Core.Abstractions.Config
 {
-    public interface IDisplayFieldConfig<TEntity, TValue> : IHasOrderBy<TEntity, IDisplayFieldConfig<TEntity, TValue>>
+    public interface IDisplayFieldConfig<TEntity, TValue> : 
+            IHasOrderBy<TEntity, IDisplayFieldConfig<TEntity, TValue>>,
+            IIsHideable<IDisplayFieldConfig<TEntity, TValue>, TEntity>
         where TEntity : IEntity
     {
         /// <summary>
@@ -34,12 +36,5 @@ namespace RapidCMS.Core.Abstractions.Config
         /// <param name="type"></param>
         /// <returns></returns>
         IDisplayFieldConfig<TEntity, TValue> SetType(Type type);
-
-        /// <summary>
-        /// Sets an expression which determines whether this field should be visible.
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        IDisplayFieldConfig<TEntity, TValue> VisibleWhen(Func<TEntity, EntityState, bool> predicate);
     }
 }

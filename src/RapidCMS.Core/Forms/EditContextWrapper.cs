@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using RapidCMS.Core.Abstractions.Data;
 using RapidCMS.Core.Abstractions.Forms;
 using RapidCMS.Core.Abstractions.Metadata;
+using RapidCMS.Core.Abstractions.Services;
 using RapidCMS.Core.Enums;
 using RapidCMS.Core.Extensions;
 using RapidCMS.Core.Helpers;
@@ -15,10 +17,14 @@ namespace RapidCMS.Core.Forms
     {
         private readonly EditContext _editContext;
 
-        public EditContextWrapper(EditContext editContext)
+        public EditContextWrapper(EditContext editContext, ClaimsPrincipal claimsPrincipal)
         {
             _editContext = editContext;
+            CurrentUser = claimsPrincipal;
         }
+
+        public ClaimsPrincipal CurrentUser { get; private set; }
+        public IAuthService AuthService => _editContext.ServiceProvider.GetService<IAuthService>();
 
         public UsageType UsageType => _editContext.UsageType;
 

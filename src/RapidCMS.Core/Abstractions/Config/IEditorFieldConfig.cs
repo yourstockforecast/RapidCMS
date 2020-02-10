@@ -4,10 +4,14 @@ using System.Linq.Expressions;
 using RapidCMS.Core.Enums;
 using RapidCMS.Core.Abstractions.Data;
 using RapidCMS.Core.Abstractions.Repositories;
+using RapidCMS.Core.Abstractions.Forms;
 
 namespace RapidCMS.Core.Abstractions.Config
 {
-    public interface IEditorFieldConfig<TEntity, TValue> : IHasOrderBy<TEntity, IEditorFieldConfig<TEntity, TValue>>
+    public interface IEditorFieldConfig<TEntity, TValue> : 
+            IHasOrderBy<TEntity, IEditorFieldConfig<TEntity, TValue>>, 
+            IIsDisableable<IEditorFieldConfig<TEntity, TValue>, TEntity>,
+            IIsHideable<IEditorFieldConfig<TEntity, TValue>, TEntity>
         where TEntity : IEntity
     {
         /// <summary>
@@ -112,19 +116,5 @@ namespace RapidCMS.Core.Abstractions.Config
             Expression<Func<TValue, IEnumerable<TKey>>> relatedElements,
             Action<ICollectionRelationConfig<TEntity, TRelatedEntity>> configure)
             where TRelatedRepository : IRepository;
-
-        /// <summary>
-        /// Sets an expression which determines whether this field should be visible.
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        IEditorFieldConfig<TEntity, TValue> VisibleWhen(Func<TEntity, EntityState, bool> predicate);
-
-        /// <summary>
-        /// Sets an expression which determine whether this field should be disabled.
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        IEditorFieldConfig<TEntity, TValue> DisableWhen(Func<TEntity, EntityState, bool> predicate);
     }
 }

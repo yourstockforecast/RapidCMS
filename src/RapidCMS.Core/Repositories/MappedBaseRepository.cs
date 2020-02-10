@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using RapidCMS.Core.Abstractions.Data;
 using RapidCMS.Core.Abstractions.Forms;
@@ -133,6 +134,12 @@ namespace RapidCMS.Core.Repositories
             => throw new NotImplementedException($"In order to use reordering in list editors, implement {nameof(ReorderAsync)} on the {GetType()}.");
 
         protected internal CmsChangeToken _repositoryChangeToken = new CmsChangeToken();
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public MappedBaseRepository(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
 
         public IChangeToken ChangeToken => _repositoryChangeToken;
         protected internal void NotifyUpdate()
@@ -169,14 +176,14 @@ namespace RapidCMS.Core.Repositories
 
         async Task<IEntity?> IRepository.InsertAsync(EditContext editContext)
         {
-            var data = await InsertAsync(new EditContextWrapper<TEntity>(editContext)) as IEntity;
+            var data = await InsertAsync(new EditContextWrapper<TEntity>(editContext, _httpContextAccessor.HttpContext.User)) as IEntity;
             NotifyUpdate();
             return data;
         }
 
         async Task IRepository.UpdateAsync(EditContext editContext)
         {
-            await UpdateAsync(new EditContextWrapper<TEntity>(editContext));
+            await UpdateAsync(new EditContextWrapper<TEntity>(editContext, _httpContextAccessor.HttpContext.User));
             NotifyUpdate();
         }
 
