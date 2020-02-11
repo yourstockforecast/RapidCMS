@@ -1,9 +1,10 @@
 ﻿using System;
+using RapidCMS.Core.Abstractions.Config;
 using RapidCMS.Core.Enums;
 
 namespace RapidCMS.Core.Models.Config
 {
-    internal class PaneButtonConfig : ButtonConfig
+    internal class PaneButtonConfig : ButtonConfig, IPaneButtonConfig
     {
         internal PaneButtonConfig(Type paneType, CrudType? crudType)
         {
@@ -12,6 +13,6 @@ namespace RapidCMS.Core.Models.Config
         }
 
         internal Type PaneType { get; set; }
-        internal CrudType? CrudType { get; set; }
+        public CrudType? CrudType { get; set; }
     }
 }

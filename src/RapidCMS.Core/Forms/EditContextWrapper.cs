@@ -12,7 +12,7 @@ using RapidCMS.Core.Helpers;
 
 namespace RapidCMS.Core.Forms
 {
-    public class EditContextWrapper<TEntity> : IEditContext<TEntity>
+    internal class EditContextWrapper<TEntity> : IEditContext<TEntity>
         where TEntity : IEntity
     {
         private readonly EditContext _editContext;

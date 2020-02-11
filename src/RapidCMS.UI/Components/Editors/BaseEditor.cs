@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using RapidCMS.Core.Abstractions.Data;
 using RapidCMS.Core.Abstractions.Metadata;
@@ -20,9 +21,9 @@ namespace RapidCMS.UI.Components.Editors
 
         [Parameter] public IPropertyMetadata Property { get; set; }
 
-        [Parameter] public Func<object, EntityState, bool>? IsDisabledFunc { get; set; }
+        [Parameter] public Func<object, Task<bool>>? IsDisabledFunc { get; set; }
 
-        protected bool IsDisabled => IsDisabledFunc?.Invoke(Entity, EntityState) ?? false; 
+        protected Task<bool> IsDisabled => IsDisabledFunc?.Invoke(EditContext) ?? Task.FromResult(false); 
 
         protected object GetValueAsObject()
         {

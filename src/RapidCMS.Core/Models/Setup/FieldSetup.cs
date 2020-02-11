@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using RapidCMS.Core.Abstractions.Metadata;
 using RapidCMS.Core.Enums;
 using RapidCMS.Core.Models.Config;
@@ -30,7 +31,7 @@ namespace RapidCMS.Core.Models.Setup
         internal IPropertyMetadata? OrderByExpression { get; set; }
         internal OrderByType DefaultOrder { get; set; }
 
-        internal Func<object, EntityState, bool> IsVisible { get; set; }
-        internal Func<object, EntityState, bool> IsDisabled { get; set; }
+        internal Func<object, Task<bool>> IsVisible { get; set; }
+        internal Func<object, Task<bool>> IsDisabled { get; set; }
     }
 }

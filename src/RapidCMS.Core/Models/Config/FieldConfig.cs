@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using RapidCMS.Core.Abstractions.Config;
 using RapidCMS.Core.Abstractions.Data;
+using RapidCMS.Core.Abstractions.Forms;
 using RapidCMS.Core.Abstractions.Metadata;
-using RapidCMS.Core.Abstractions.Repositories;
 using RapidCMS.Core.Attributes;
 using RapidCMS.Core.Enums;
 using RapidCMS.Core.Exceptions;
@@ -20,8 +21,8 @@ namespace RapidCMS.Core.Models.Config
         internal string? Name { get; set; }
         internal string? Description { get; set; }
 
-        internal Func<object, EntityState, bool> IsVisible { get; set; } = (x, y) => true;
-        internal Func<object, EntityState, bool> IsDisabled { get; set; } = (x, y) => false;
+        internal Func<object, Task<bool>> IsVisible { get; set; } = x => Task.FromResult(true);
+        internal Func<object, Task<bool>> IsDisabled { get; set; } = x => Task.FromResult(false);
 
         internal IExpressionMetadata? Expression { get; set; }
         internal IPropertyMetadata? Property { get; set; }
@@ -65,9 +66,15 @@ namespace RapidCMS.Core.Models.Config
             return this;
         }
 
-        IDisplayFieldConfig<TEntity, TValue> IDisplayFieldConfig<TEntity, TValue>.VisibleWhen(Func<TEntity, EntityState, bool> predicate)
+        IDisplayFieldConfig<TEntity, TValue> IIsHideable<IDisplayFieldConfig<TEntity, TValue>, TEntity>.VisibleWhen(Func<IEditContext<TEntity>, bool> predicate)
         {
-            IsVisible = (entity, state) => predicate.Invoke((TEntity)entity, state);
+            IsVisible = context => Task.FromResult(predicate.Invoke((IEditContext<TEntity>)context));
+            return this;
+        }
+
+        IDisplayFieldConfig<TEntity, TValue> IIsHideable<IDisplayFieldConfig<TEntity, TValue>, TEntity>.VisibleWhen(Func<IEditContext<TEntity>, Task<bool>> predicate)
+        {
+            IsVisible = context => predicate.Invoke((IEditContext<TEntity>)context);
             return this;
         }
 
@@ -202,15 +209,27 @@ namespace RapidCMS.Core.Models.Config
             return this;
         }
 
-        IEditorFieldConfig<TEntity, TValue> IEditorFieldConfig<TEntity, TValue>.VisibleWhen(Func<TEntity, EntityState, bool> predicate)
+        IEditorFieldConfig<TEntity, TValue> IIsDisableable<IEditorFieldConfig<TEntity, TValue>, TEntity>.DisableWhen(Func<IEditContext<TEntity>, bool> predicate)
         {
-            IsVisible = (entity, state) => predicate.Invoke((TEntity)entity, state);
+            IsDisabled = context => Task.FromResult(predicate.Invoke((IEditContext<TEntity>)context));
             return this;
         }
 
-        IEditorFieldConfig<TEntity, TValue> IEditorFieldConfig<TEntity, TValue>.DisableWhen(Func<TEntity, EntityState, bool> predicate)
+        IEditorFieldConfig<TEntity, TValue> IIsDisableable<IEditorFieldConfig<TEntity, TValue>, TEntity>.DisableWhen(Func<IEditContext<TEntity>, Task<bool>> predicate)
         {
-            IsDisabled = (entity, state) => predicate.Invoke((TEntity)entity, state);
+            IsDisabled = context => predicate.Invoke((IEditContext<TEntity>)context);
+            return this;
+        }
+
+        IEditorFieldConfig<TEntity, TValue> IIsHideable<IEditorFieldConfig<TEntity, TValue>, TEntity>.VisibleWhen(Func<IEditContext<TEntity>, bool> predicate)
+        {
+            IsVisible = context => Task.FromResult(predicate.Invoke((IEditContext<TEntity>)context));
+            return this;
+        }
+
+        IEditorFieldConfig<TEntity, TValue> IIsHideable<IEditorFieldConfig<TEntity, TValue>, TEntity>.VisibleWhen(Func<IEditContext<TEntity>, Task<bool>> predicate)
+        {
+            IsVisible = context => predicate.Invoke((IEditContext<TEntity>)context);
             return this;
         }
 
@@ -227,5 +246,7 @@ namespace RapidCMS.Core.Models.Config
             DefaultOrder = defaultOrder;
             return this;
         }
+
+        
     }
 }

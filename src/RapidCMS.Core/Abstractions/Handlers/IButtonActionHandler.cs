@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using RapidCMS.Core.Abstractions.Forms;
 using RapidCMS.Core.Abstractions.Setup;
 using RapidCMS.Core.Enums;
 using RapidCMS.Core.Forms;
@@ -14,7 +15,9 @@ namespace RapidCMS.Core.Abstractions.Handlers
         bool ShouldAskForConfirmation(IButton button, EditContext editContext);
         bool RequiresValidForm(IButton button, EditContext editContext);
 
-        Task<CrudType> ButtonClickBeforeRepositoryActionAsync(IButton button, EditContext editContext, ButtonContext context);
-        Task ButtonClickAfterRepositoryActionAsync(IButton button, EditContext editContext, ButtonContext context);
+        Task<CrudType> ButtonClickBeforeRepositoryActionAsync(IButton button, EditContext editContext, IButtonContext context);
+        Task ButtonClickAfterRepositoryActionAsync(IButton button, EditContext editContext, IButtonContext context);
+
+        Task<bool> IsDisabled(IButtonContext context);
     }
 }

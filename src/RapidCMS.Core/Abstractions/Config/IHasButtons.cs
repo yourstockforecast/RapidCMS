@@ -17,6 +17,14 @@ namespace RapidCMS.Core.Abstractions.Config
         TReturn AddDefaultButton(DefaultButtonType type, string? label = null, string? icon = null, bool isPrimary = false);
 
         /// <summary>
+        /// Adds a default button. A default button is a simple button with a fixed CrudType.
+        /// </summary>
+        /// <param name="type">Type of button to add</param>
+        /// <param name="config">Action to configure button</param>
+        /// <returns></returns>
+        TReturn AddDefaultButton(DefaultButtonType type, Action<IButtonConfig> config);
+
+        /// <summary>
         /// Adds a custom button. A custom button is a razor component derived from BaseButton, and has a IButtonActionHandler that is invoked when the button is clicked.
         /// </summary>
         /// <typeparam name="TActionHandler">Type of the button action handler</typeparam>
@@ -36,5 +44,13 @@ namespace RapidCMS.Core.Abstractions.Config
         /// <param name="defaultCrudType">Default that is provided to the BaseSideBar derived component, to use when invoking ButtonClicked.</param>
         /// <returns></returns>
         TReturn AddPaneButton(Type paneType, string? label = null, string? icon = null, CrudType? defaultCrudType = null);
+
+        /// <summary>
+        /// Adds a pane button. A pane button is a default button that opens a modal which displays the given razor component in it. The razor component must be drived from BaseSideBar. 
+        /// </summary>
+        /// <param name="paneType">Type of the razor component</param>
+        /// <param name="config">Action to configure button</param>
+        /// <returns></returns>
+        TReturn AddPaneButton(Type paneType, Action<IPaneButtonConfig> config);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using RapidCMS.Core.Abstractions.Forms;
 using RapidCMS.Core.Abstractions.Setup;
 using RapidCMS.Core.Attributes;
 using RapidCMS.Core.Enums;
@@ -20,6 +22,7 @@ namespace RapidCMS.Core.Models.Setup
             Label = button.Label ?? def?.Label ?? "Button";
             Icon = button.Icon ?? def?.Icon ?? "";
             IsPrimary = button.IsPrimary;
+            IsDisabled = button.IsDisabled;
 
             ButtonId = button.Id ?? throw new ArgumentNullException(nameof(button.Id));
             EntityVariant = baseEntityVariant;
@@ -76,6 +79,8 @@ namespace RapidCMS.Core.Models.Setup
         public string Label { get; private set; }
         public string Icon { get; private set; }
         public bool IsPrimary { get; private set; }
+
+        public Func<IButtonContext, Task<bool>> IsDisabled { get; set; }
 
         public IEnumerable<IButtonSetup> Buttons { get; private set; } = EmptySubButtons;
 

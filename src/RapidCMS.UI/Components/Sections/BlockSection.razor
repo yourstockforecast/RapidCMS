@@ -17,7 +17,7 @@
 
         @foreach (var element in Section.Elements)
         {
-            if (!element.IsVisible(EditContext.Entity, EditContext.EntityState))
+            if (!await element.IsVisible(EditContext))
             {
                 continue;
             }
