@@ -33,7 +33,7 @@ using RapidCMS.Core.Services.Presentation;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class RapidCMSMiddlewareApi
+    public static class RapidCMSMiddlewareWebApi
     {
         private static IControllerModelConvention? _routeConvention;
         private static IApplicationFeatureProvider<ControllerFeature>? _controllerFeatureProvider;

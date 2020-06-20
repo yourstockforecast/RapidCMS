@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("RapidCMS.Repositories")]
 [assembly: InternalsVisibleTo("RapidCMS.Api.WebApi")]
+[assembly: InternalsVisibleTo("RapidCMS.Api.AzureFunctions")]
 
 namespace RapidCMS.Core
 {
