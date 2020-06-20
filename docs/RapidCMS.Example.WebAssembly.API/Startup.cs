@@ -36,8 +36,6 @@ namespace RapidCMS.Example.WebAssembly.API
 
             services.AddRapidCMSApi(config =>
             {
-                // TODO: missing configurations:
-                // - OrderBy
                 config.RegisterRepository<Person, JsonRepository<Person>>("person");
                 config.RegisterRepository<ConventionalPerson, JsonRepository<ConventionalPerson>>("person-convention");
                 config.RegisterRepository<Country, JsonRepository<Country>>("country");
