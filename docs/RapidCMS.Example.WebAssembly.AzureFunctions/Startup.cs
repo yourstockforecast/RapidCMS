@@ -27,6 +27,8 @@ namespace RapidCMS.Example.WebAssembly.AzureFunctions
             
             builder.AddRapidCMSApi(config =>
             {
+                
+
                 config.RegisterRepository<Person, JsonRepository<Person>>("person");
             });
         }

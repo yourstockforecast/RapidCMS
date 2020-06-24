@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,24 +12,32 @@ namespace RapidCMS.Example.WebAssembly.AzureFunctions
 {
     public static class Function1
     {
-        [FunctionName("Function1")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+        public static class GetAllFunction
+        {
+            [FunctionName(nameof(GetAllFunction))]
+            public static async Task<IActionResult> RunAsync(
+                [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "_rapidcms/{collectionAlias}/all")] HttpRequest req,
+                string collectionAlias,
+                ILogger log)
+            {
+
+
+                return new OkObjectResult("[]");
+            }
+        }
+    }
+
+    public static class NewFunction
+    {
+        [FunctionName(nameof(NewFunction))]
+        public static async Task<IActionResult> RunAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "_rapidcms/{collectionAlias}/new")] HttpRequest req,
+            string collectionAlias,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
-
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+            return new OkObjectResult("{}");
         }
     }
 }

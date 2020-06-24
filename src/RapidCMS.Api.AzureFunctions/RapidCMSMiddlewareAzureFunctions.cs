@@ -93,7 +93,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddTransient<IEditContextFactory, EditContextWrapperFactory>();
 
-            builder.
+            
 
             //var controllersToAdd = rootConfig.Collections.ToDictionary(
             //    kv =>
